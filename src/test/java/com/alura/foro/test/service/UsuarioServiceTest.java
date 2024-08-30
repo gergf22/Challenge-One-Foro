@@ -1,7 +1,10 @@
 package com.alura.foro.test.service;
 
+import com.alura.foro.dto.responce.UsuarioDTO;
+import com.alura.foro.exceptions.BadRequestException;
 import com.alura.foro.modelo.Usuario;
 import com.alura.foro.service.UsuarioService;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +22,8 @@ public class UsuarioServiceTest {
     @Autowired
     private UsuarioService service;
 
+    private static final Logger logger = Logger.getLogger(UsuarioServiceTest.class);
+
 
     @Test
     @Order(1)
@@ -26,10 +31,13 @@ public class UsuarioServiceTest {
 
         Usuario usuario = new Usuario("german","Ger@ger","Qlala2@das");
 
-        Usuario usuario2 = service.saveUsuarios(usuario);
+        UsuarioDTO usuario2= null ;
 
-        System.out.println(usuario);
-        System.out.println(usuario2);
+        try{
+            usuario2= service.setUsuario(usuario);
+        }catch (BadRequestException e){
+            logger.error(e.getMessage());
+        };
 
         assertEquals(usuario.getNombre(),usuario2.getNombre());
 
@@ -38,9 +46,9 @@ public class UsuarioServiceTest {
 
     @Test
     @Order(2)
-    public void getUsuario (){
+    public void getUsuarios (){
 
-        List<Usuario> usuarios = service.getUsuarios();
+        List<UsuarioDTO> usuarios = service.getUsuarios();
 
         System.out.println(usuarios);
 
@@ -55,7 +63,7 @@ public class UsuarioServiceTest {
 
         service.updateUsuario(usuario);
 
-        Usuario usuario2 = service.getUsuarios().get(0);
+        UsuarioDTO usuario2 = service.getUsuarios().get(0);
 
         assertEquals(usuario.getNombre(),usuario2.getNombre());
 
@@ -66,7 +74,7 @@ public class UsuarioServiceTest {
     public void deleteUsuario (){
         service.deleteUsuario(1l);
 
-        List<Usuario> usuarios = service.getUsuarios();
+        List<UsuarioDTO> usuarios = service.getUsuarios();
 
         assertTrue(usuarios.size()==0);
     }

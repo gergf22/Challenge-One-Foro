@@ -1,14 +1,20 @@
 package com.alura.foro.test.service;
 
+import com.alura.foro.dto.responce.TopicoDTO;
+import com.alura.foro.dto.responce.UsuarioDTO;
+import com.alura.foro.exceptions.BadRequestException;
 import com.alura.foro.modelo.Curso;
 import com.alura.foro.modelo.Respuesta;
 import com.alura.foro.modelo.Topico;
 import com.alura.foro.modelo.Usuario;
+import com.alura.foro.repository.CursoRepository;
+import com.alura.foro.repository.UsuarioRepository;
 import com.alura.foro.service.CursoService;
 import com.alura.foro.service.RespuestaService;
 import com.alura.foro.service.TopicoService;
 import com.alura.foro.service.UsuarioService;
 import org.junit.jupiter.api.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -26,33 +32,30 @@ public class TopicoServiceTest {
     private TopicoService topicoService;
 
     @Autowired
-    private CursoService cursoService;
+    private CursoRepository cursoRepository;
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private RespuestaService respuestaService;
 
 
 
     @Test
     @Order(1)
     public void addTopicoCorrectData (){
-        Curso curso = new Curso("Back-End","Web");
+        Curso curso = cursoRepository.save(new Curso("Back-End","Web"));
 
-        Usuario usuario = new Usuario("german","Ger@ger","Qlala2@das");
+        Usuario usuario = usuarioRepository.save(new Usuario("german","Ger@ger","Qlala2@das"));
 
-        Curso curso1= cursoService.setCurso(curso);
 
-        Usuario usuario1 = usuarioService.saveUsuarios(usuario);
 
-        Topico topico = new Topico("ayuda con java","no puedo cargar los test",curso1,usuario1);
 
-        Topico topico1 = topicoService.saveTopico(topico);
+        Topico topico = new Topico("ayuda con java","no puedo cargar los test",curso,usuario);
 
-        assertEquals(topico1.getAutor(),topico.getAutor());
-        assertEquals(topico1.getCurso(),topico.getCurso());
+        TopicoDTO topico1 = topicoService.setTopico(topico);
+
+        assertEquals(topico1.getAutor().getNombre() + topico1.getCurso().getNombre() ,
+                topico.getAutor().getNombre() + topico.getCurso().getNombre());
 
 
     }
@@ -61,7 +64,7 @@ public class TopicoServiceTest {
     @Order(2)
     public void getTopicosTest (){
 
-        List<Topico> topicos = topicoService.getTopicos();
+        List<TopicoDTO> topicos = topicoService.getTopicos();
 
 
         assertTrue(topicos.size()==1);
@@ -74,44 +77,38 @@ public class TopicoServiceTest {
     public void findTopicoById (){
         String tituloEsperado = "ayuda con java";
 
-        Optional<Topico> topico = topicoService.getTopicoById(1l);
+        TopicoDTO topico = topicoService.getTopicoById(1l);
 
-        assertEquals(topico.get().getTitulo(),tituloEsperado);
+        assertEquals(topico.getTitulo(),tituloEsperado);
     }
 
     @Test
     @Order(4)
     public void updateTopicoCorrectData (){
 
-        Usuario usuario= usuarioService.getUsuarios().get(0);
-        Curso curso = cursoService.getCursos().get(0);
+        Usuario usuario= usuarioRepository.findById(1l).get();
+        Curso curso = cursoRepository.findById(1L).get();
         Topico topicoActualizado = new Topico("Por favor ayuda con java","no puedo cargar los test",curso,usuario);
         topicoActualizado.setId(1l);
 
-        Optional<Topico> topicoGuardado = topicoService.getTopicoById(1l);
+
+        TopicoDTO topicoGuardado = topicoService.getTopicoById(1l);
 
         topicoService.updateTopico(topicoActualizado);
 
-        Optional<Topico> topicoNuevo =topicoService.getTopicoById(1l);
+        TopicoDTO topicoNuevo =topicoService.getTopicoById(1l);
 
-        assertNotEquals(topicoGuardado.get().getTitulo(),topicoNuevo.get().getTitulo());
+        assertNotEquals(topicoGuardado.getTitulo(),topicoNuevo.getTitulo());
 
     }
 
     @Test
     @Order(5)
-    public void getRespuestasTopico (){
-        Respuesta respuesta = respuestaService.setRespuesta(
-                new Respuesta("fijate las carpetas",topicoService.getTopicos().get(0),usuarioService.getUsuarios().get(0))
-        );
+    public void deleteTopico (){
+        topicoService.deleteTopico(1l);
 
-        Respuesta respuesta2 = respuestaService.setRespuesta(
-                new Respuesta("Acomoda la carpeta test",topicoService.getTopicos().get(0),usuarioService.getUsuarios().get(0))
-        );
-
-
-        Set<Respuesta> respuestasTopico = topicoService.getRespuestasTopico(1l);
-
-        assertTrue(respuestasTopico.size()==2);
+        assertTrue(topicoService.getTopicos().size()==0);
     }
+
+
 }
