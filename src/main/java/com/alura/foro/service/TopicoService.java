@@ -1,6 +1,7 @@
 package com.alura.foro.service;
 
 import com.alura.foro.dto.responce.TopicoDTO;
+import com.alura.foro.modelo.StatusTopico;
 import com.alura.foro.modelo.Topico;
 import com.alura.foro.repository.TopicoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -59,6 +60,35 @@ public class TopicoService {
         return topicoDTO;
     }
 
+    // -- A desarrollar --
+    public TopicoDTO getTopicoByUsuario (Long id){
+        return null;
+    }
+
+    // -- A desarrollar --
+    public TopicoDTO getTopicoByCurso(Long id){
+        return null;
+    }
+
+
+    public void validarStatusRespondido (Topico topico){
+
+
+        if(repository.findById(topico.getId()).isPresent())
+        {
+            Topico topicoEnBD = repository.findById(topico.getId()).get();
+
+            if(topicoEnBD.getStatus() == StatusTopico.NO_RESPONDIDO){
+                topicoEnBD.setStatus(StatusTopico.NO_SOLUCIONADO);
+                repository.save(topicoEnBD);
+            }
+
+        }else {
+
+            throw new EntityNotFoundException("Topico no encontrado");
+
+        }
+    }
 
 
 }

@@ -56,7 +56,11 @@ public class UsuarioService {
 
     }
 
-    public Optional<Usuario> findUserById (Long id) {return repository.findById(id);}
+    public UsuarioDTO findUserById (Long id) {
+            Usuario usuario = repository.findById(id).orElseThrow();
+            UsuarioDTO usuarioDTO = modelMapper.map(usuario, UsuarioDTO.class);
+            return usuarioDTO;
+        }
 
     public void updateUsuario (Usuario usuario)throws EntityNotFoundException {
         if (repository.findById(usuario.getId()).isPresent()) {

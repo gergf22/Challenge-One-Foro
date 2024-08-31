@@ -34,13 +34,13 @@ public class TopicoController {
         return ResponseEntity.ok("Se ha actualizado el tópico con éxito.");
     }
 
-    @DeleteMapping(path = "/id")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteTopico(@PathVariable Long id){
         topicoService.deleteTopico(id);
         return ResponseEntity.ok("Se ha eliminado el tópico con éxito.");
     }
 
-    @GetMapping(path = "/id")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<TopicoDTO> getTopicoById (@PathVariable Long id){
         return ResponseEntity.ok(topicoService.getTopicoById(id));
     }

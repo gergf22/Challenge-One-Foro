@@ -1,26 +1,17 @@
 package com.alura.foro.test.service;
 
 import com.alura.foro.dto.responce.TopicoDTO;
-import com.alura.foro.dto.responce.UsuarioDTO;
-import com.alura.foro.exceptions.BadRequestException;
 import com.alura.foro.modelo.Curso;
-import com.alura.foro.modelo.Respuesta;
 import com.alura.foro.modelo.Topico;
 import com.alura.foro.modelo.Usuario;
 import com.alura.foro.repository.CursoRepository;
 import com.alura.foro.repository.UsuarioRepository;
-import com.alura.foro.service.CursoService;
-import com.alura.foro.service.RespuestaService;
 import com.alura.foro.service.TopicoService;
-import com.alura.foro.service.UsuarioService;
 import org.junit.jupiter.api.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,16 +38,12 @@ public class TopicoServiceTest {
 
         Usuario usuario = usuarioRepository.save(new Usuario("german","Ger@ger","Qlala2@das"));
 
-
-
-
         Topico topico = new Topico("ayuda con java","no puedo cargar los test",curso,usuario);
 
         TopicoDTO topico1 = topicoService.setTopico(topico);
 
         assertEquals(topico1.getAutor().getNombre() + topico1.getCurso().getNombre() ,
                 topico.getAutor().getNombre() + topico.getCurso().getNombre());
-
 
     }
 

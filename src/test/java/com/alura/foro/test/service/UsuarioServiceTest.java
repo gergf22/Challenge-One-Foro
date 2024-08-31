@@ -71,6 +71,15 @@ public class UsuarioServiceTest {
 
     @Test
     @Order(4)
+    public void getUsuarioById (){
+        UsuarioDTO usuario = service.findUserById(1l);
+
+        assertEquals(usuario.getNombre(),"Gergf22");
+    }
+
+
+    @Test
+    @Order(5)
     public void deleteUsuario (){
         service.deleteUsuario(1l);
 

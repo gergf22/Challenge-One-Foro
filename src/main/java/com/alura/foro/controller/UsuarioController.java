@@ -30,6 +30,11 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.getUsuarios());
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<UsuarioDTO> getUsuarioById (@PathVariable Long id){
+        return ResponseEntity.ok(usuarioService.findUserById(id));
+    }
+
 
     @PutMapping
     public ResponseEntity<String> updateUsuario(@RequestBody @Valid Usuario usuario){
@@ -37,7 +42,7 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuario actualizado con éxito");
     }
 
-    @DeleteMapping(path = "/id")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteUsuario (@PathVariable Long id){
         usuarioService.deleteUsuario(id);
         return ResponseEntity.ok("Usuario eliminado con éxito");

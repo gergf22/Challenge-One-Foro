@@ -18,7 +18,7 @@ public class TopicoDTO {
 
     private String titulo;
 
-    private String message;
+    private String mensaje;
 
     private LocalDateTime fechaCreacion;
 
@@ -29,8 +29,9 @@ public class TopicoDTO {
     private Curso curso;
 
     public TopicoDTO(Topico topico) {
+        this.id = topico.getId();
         this.titulo = topico.getTitulo();
-        this.message = topico.getMensaje();
+        this.mensaje = topico.getMensaje();
         this.fechaCreacion = topico.getFechaCreacion();
         this.statusTopico = topico.getStatus();
         this.autor = new UsuarioDTO(topico.getAutor());
