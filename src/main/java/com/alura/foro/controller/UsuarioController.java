@@ -20,6 +20,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
 
+
     @PostMapping
     public ResponseEntity<UsuarioDTO> guardarUsuario (@RequestBody @Valid Usuario usuario) throws BadRequestException {
         return ResponseEntity.ok(usuarioService.setUsuario(usuario));

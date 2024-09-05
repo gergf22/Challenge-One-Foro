@@ -32,7 +32,7 @@ public class CursoController {
         return ResponseEntity.ok("Curso actualizado con éxito");
     }
 
-    @DeleteMapping(path = "/id")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteCurso (@PathVariable Long id){
         cursoService.deleteCurso(id);
         return ResponseEntity.ok("Curso eliminado con éxito");
